@@ -8,16 +8,20 @@ $modulePath = Join-Path $scriptDir 'lib.psm1'
 Import-Module $modulePath
 
 switch ($command) {
-	"add" {
-		addAlias $name $location 
+    { $_ -in @("add", "ad") } {
+        addAlias $name $location
+    }
+    { $_ -in @("delete", "dl") } {
+        deleteAlias $name
+    }
+    { $_ -in @("list", "ls") } {
+        listAliases
+    }
+	"" {
+		Write-Host "Invalid Input" -ForegroundColor Red
+		Write-Host "Enter Command or Alias" -ForegroundColor Yellow
 	}
-	"delete" {
-		deleteAlias $name
-	}
-	"list" {
-		listAliases
-	}
-	default {
-		changeDirectory $command		
-	}
+    default {
+        changeDirectory $command
+    }
 }

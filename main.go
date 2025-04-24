@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"encoding/json"
+	ui "fa/ui"
 )
 
 type Alias struct {
@@ -142,6 +143,15 @@ func listAliases() {
 }
 
 func main() {
+	size := len(os.Args)
+	if (size < 2) {
+		err := ui.RunBubbleTeaApp()
+		if err != nil {
+			fmt.Printf("Error running Bubble Tea: %v\n", err)
+			os.Exit(1)
+		}
+		return
+	}
 	args := os.Args[1:]
 	switch args[0] {
 		case "add","ad":
