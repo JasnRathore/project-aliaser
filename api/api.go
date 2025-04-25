@@ -3,6 +3,7 @@ package api
 import (
 	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/agnivade/levenshtein"	
 	
 	"fmt"
     "log"
@@ -16,6 +17,11 @@ type Alias struct {
     Name  string `json:"name"`
 	Location string `json:"location"`
 }
+// mainly cd and nothing
+type MidFile struct {
+	Command string `json:"command"`
+    Name  string `json:"name"`
+}
 
 type GetResponse struct {
 	Status bool `json:"status"`
@@ -26,6 +32,13 @@ func check(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }
 
 func getPath() string {
@@ -48,6 +61,9 @@ func initDatabase() {
 	);`
 	
 	_, err = db.Exec(createTable)
+	check(err)
+	
+	_, err = db.Exec("CREATE INDEX IF NOT EXISTS idx_name ON aliases(name);")
 	check(err)
 }
 
@@ -140,3 +156,53 @@ func ListAliases() {
     }
 	json.NewEncoder(os.Stdout).Encode(aliases)
 }
+
+func FuzzySearchAlias(query string) ([]Alias, error) {
+	db, err := sql.Open("sqlite3", getPath())
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	candidateQuery := "%" + query + "%"
+	rows, err := db.Query("SELECT id, name, location FROM aliases WHERE name LIKE ?", candidateQuery)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var matches []Alias
+	for rows.Next() {
+		var a Alias
+		err := rows.Scan(&a.ID, &a.Name, &a.Location)
+		if err != nil {
+			return nil, err
+		}
+
+		// Compute Levenshtein distance for fuzzy matching
+		dist := levenshtein.ComputeDistance(query, a.Name)
+		if dist <= 3 { // You can adjust the distance threshold
+			matches = append(matches, a)
+		}
+	}
+
+	return matches, nil
+}
+
+func WriteToMidFile(command string,name string) {
+	
+	data := MidFile {
+		Command: command,
+		Name: name,
+	}	
+	
+	file, err := os.Create("mid_file.json")
+	check(err)
+	defer file.Close()	
+	
+	encoder := json.NewEncoder(file)
+	if err := encoder.Encode(data); err != nil {
+		fmt.Println("Error encoding JSON:", err)
+		return
+	}
+} 

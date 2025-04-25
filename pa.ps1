@@ -18,8 +18,16 @@ switch ($command) {
         listAliases
     }
 	"" {
-		Write-Host "Invalid Input" -ForegroundColor Red
-		Write-Host "Enter Command or Alias" -ForegroundColor Yellow
+    	$exe = getExe
+        & $exe
+        $file = GetMidFile
+        $data = Get-Content $file -Raw | ConvertFrom-Json
+        switch ($data.command) {
+            "cd" {
+               changeDirectory $data.name
+            }
+        }
+        Clear-Content -Path $file       
 	}
     default {
         changeDirectory $command

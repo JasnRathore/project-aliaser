@@ -3,6 +3,12 @@ function GetExe {
     $exePath = Join-Path $scriptDir 'fa.exe'
     $exePath 
 }
+
+function GetMidFile {
+    $scriptDir = $PSScriptRoot
+    $exePath = Join-Path $scriptDir 'mid_file.json'
+    $exePath 
+}
 function addAlias {
     param (
         [string]$name,

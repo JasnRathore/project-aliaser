@@ -3,6 +3,8 @@ module fa
 go 1.22.1
 
 require (
+	github.com/agnivade/levenshtein v1.2.1 // indirect
+	github.com/atotto/clipboard v0.1.4 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/charmbracelet/bubbletea v1.3.4 // indirect
 	github.com/charmbracelet/lipgloss v1.0.0 // indirect
