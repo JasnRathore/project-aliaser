@@ -48,6 +48,13 @@ func getPath() string {
 	return dir + "/aliases.db"
 }
 
+func getPathMidFile() string {
+	exePath, err := os.Executable()
+	check(err)
+	dir := filepath.Dir(exePath)
+	return dir + "/mid_file.json"
+}
+
 func initDatabase() {
 	db, err := sql.Open("sqlite3", getPath())
 	check(err)
@@ -190,13 +197,12 @@ func FuzzySearchAlias(query string) ([]Alias, error) {
 }
 
 func WriteToMidFile(command string,name string) {
-	
 	data := MidFile {
 		Command: command,
 		Name: name,
 	}	
 	
-	file, err := os.Create("mid_file.json")
+	file, err := os.Create(getPathMidFile())
 	check(err)
 	defer file.Close()	
 	
