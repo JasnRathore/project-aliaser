@@ -85,14 +85,17 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case "q":
 			return m, tea.Quit
+			
 		case "up", "k":
 			if m.cursor > 0 {
 				m.cursor--
 			}
+			
 		case "down", "j":
 			if m.cursor < len(m.choices)-1 {
 				m.cursor++
 			}
+			
 		case "enter":
 			selected := m.choices[m.cursor]
 			if selected == "Search" {
@@ -111,28 +114,22 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m model) View() string {
 	var b strings.Builder
 
-	// Instructions at the top for navigation
 	b.WriteString("  ↑/↓ or j/k to move • Enter to select • q to quit\n\n")
 
 	switch m.mode {
 	case "message":
-		// Simple message display
 		return fmt.Sprintf("\n  %s\n\n  Press Enter to continue", m.status)
 
 	case "search":
-		// Search header
 		b.WriteString("Search Aliases\n")
 
-		// Search input
 		b.WriteString(fmt.Sprintf("  > %s\n\n", m.searchText))
 
-		// No results or empty search input state
 		if strings.TrimSpace(m.searchText) == "" {
 			b.WriteString("  Start typing to search...\n")
 		} else if len(m.searchResults) == 0 {
 			b.WriteString("  No matches found.\n")
 		} else {
-			// Display search results
 			for i, result := range m.searchResults {
 				prefix := "  "
 				if i == m.searchCursor {
