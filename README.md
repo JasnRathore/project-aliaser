@@ -40,6 +40,13 @@ The project uses several Go packages:
    - Ensure the PowerShell module and script are in the same directory as the executable
    - The module will be imported automatically when using the `pa.ps1` script
   
+2. **Put** the files in a folder (e.g., `~\sufumi\project-aliaser\`)
+3. **Add** the folder to your `$PATH` .  
+4. **Run in PowerShell**:  
+   ```ps1
+   pa  # Launches the interactive TUI
+   ```
+  
 #### Option 2: Downloading the Pre-built Executable
 
 1. **Download** the latest release (`project-aliaser@v0.1.0.zip`).  
@@ -59,10 +66,10 @@ The project uses several Go packages:
 
 ```powershell
 # Add an alias to the current directory
-./pa.ps1 add projects .
+pa add projects .
 
 # Add an alias to a specific path
-./pa.ps1 add documents "C:\Users\username\Documents" 
+pa add documents "C:\Users\username\Documents" 
 ```
 
 ## 🔍 Usage
@@ -73,13 +80,13 @@ FA supports both direct command-line arguments and an interactive TUI:
 
 ```powershell
 # List all aliases
-./pa.ps1 list
+pa list
 
 # Jump to an aliased location
-./pa.ps1 projects
+pa projects
 
 # Delete an alias
-./pa.ps1 delete projects
+pa delete projects
 ```
 
 ### Interactive UI
@@ -87,7 +94,7 @@ FA supports both direct command-line arguments and an interactive TUI:
 Launch the interactive UI by running FA without arguments:
 
 ```powershell
-./pa.ps1
+pa
 ```
 
 In the TUI:
@@ -102,16 +109,16 @@ In the TUI:
 
 ```powershell
 # Create new alias
-./pa.ps1 add dev "C:\Development"
+pa add dev "C:\Development"
 
 # Alternative shorthand
-./pa.ps1 ad dev "C:\Development"
+pa ad dev "C:\Development"
 
 # List all aliases
-./pa.ps1 ls
+pa ls
 
 # Delete an alias
-./pa.ps1 dl dev
+pa dl dev
 ```
 
 ### Fuzzy Search
@@ -144,18 +151,18 @@ Navigating to an aliased location works via a temporary JSON file (`mid_file.jso
 
 ```powershell
 # Create aliases for different project directories
-./pa.ps1 add go "C:\Development\Go"
-./pa.ps1 add python "C:\Development\Python"
-./pa.ps1 add web "C:\Development\Web"
+pa add go "C:\Development\Go"
+pa add python "C:\Development\Python"
+pa add web "C:\Development\Web"
 
 # Now navigate using short commands
-./pa.ps1 go    # Changes to C:\Development\Go
-./pa.ps1 web   # Changes to C:\Development\Web
+pa go    # Changes to C:\Development\Go
+pa web   # Changes to C:\Development\Web
 ```
 
 ### Example 2: Using the interactive search
 
-1. Run `./pa.ps1` to open the interactive UI
+1. Run `pa` to open the interactive UI
 2. Select "Search"
 3. Type part of an alias name (e.g., "dev")  
 4. Use arrow keys to select from matching results
